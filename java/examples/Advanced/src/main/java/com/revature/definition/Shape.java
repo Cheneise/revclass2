@@ -9,17 +9,21 @@ public abstract class Shape implements Calculable {
 	protected final Color color;
 	
 	public Shape(String name, Color color) {
+		//super(); -----> Implicit!
 		LOGGER.trace("Args shape");
-		
 		this.name = name;
 		this.color = color;
 	}
 	
 	/**
-	 * Prints a brief description of the shape
+	 * Prints a brief explanation of the Shape
 	 */
 	protected abstract void describe();
 
+	/*
+	 * Fields of this class are immutable, no setters.
+	 */
+	
 	public String getName() {
 		return name;
 	}
@@ -27,7 +31,7 @@ public abstract class Shape implements Calculable {
 	public Color getColor() {
 		return color;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

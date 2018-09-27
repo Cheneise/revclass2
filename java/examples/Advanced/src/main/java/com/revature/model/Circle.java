@@ -9,11 +9,14 @@ public class Circle extends Shape {
 	private static final Logger LOGGER = Logger.getLogger(Circle.class);
 	
 	private Double radius;
-
-	public Circle(String name, Color color, Double radius) {
-		super(name, color);
-		//We can't log first line
-		LOGGER.trace("Circle args");
+	
+	/*
+	 * We don't have a default constructor anymore, so classes are forced to pass parameters.
+	 */
+	
+	public Circle(Color color, Double radius) {
+		super("CIRCLE", color);
+		LOGGER.trace("Args circle");
 		this.radius = radius;
 	}
 
@@ -55,25 +58,24 @@ public class Circle extends Shape {
 		return "Circle [radius=" + radius + ", name=" + name + ", color=" + color + "]";
 	}
 
-	//"Clever math"
-	public boolean isOdd(int n) {
-		return Math.pow(-1, n) == -1;
-	}
 	
-	@Override
-	public Double area() {
-		return Math.PI * Math.pow(radius, 2);
-	}
-
+	/*
+	 * Override annotation is optional! It just helps to do a double check at compile time to check if a method it's properly
+	 * overridden, because if you don't do it properly, it's a completely different method and virtual method invocation won't
+	 * happen.
+	 */
 	@Override
 	public Double perimeter() {
 		return 2 * Math.PI * radius;
 	}
 
 	@Override
-	protected void describe() {
-		LOGGER.info("A round plane figure whose boundary (the circumference) "
-				+ "consists of points equidistant from a fixed point "
-				+ "(the center).");
+	public Double area() {
+		return Math.PI * Math.pow(radius, 2);
+	}
+
+	@Override
+	public final void describe() {
+		LOGGER.info("A 2-dimensional shape made by drawing a curve that is always the same distance from a center.");
 	}
 }
