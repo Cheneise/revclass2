@@ -3,6 +3,7 @@ package com.revature.definition;
 public interface Calculable {
 	//Remember, implicit public abstract
 	
+	
 	/**
 	 * Calculates the area of a Shape depending on
 	 * it's internal parameters.
