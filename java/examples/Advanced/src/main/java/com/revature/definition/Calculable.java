@@ -1,21 +1,23 @@
 package com.revature.definition;
 
 public interface Calculable {
-	//Remember, implicit public abstract
-	
 	/**
-	 * Calculates the area of a Shape depending on
-	 * it's internal parameters.
+	 * Returns the perimeter of the Shape based on it's own particular state.
 	 * 
-	 * @return the area represented in floating point
-	 */
-	public abstract Double area();
-	
-	/**
-	 * Calculates the perimeter of a Shape depending on
-	 * it's internal parameters.
+	 * All Shapes calculate their perimeter differently, so the behavior must use
+	 * the fields of the Concrete shape.
 	 * 
-	 * @return the perimeter represented in floating point
+	 * @return The perimeter in floating point format
 	 */
 	Double perimeter();
+	
+	/**
+	 * Returns the area of the Shape based on it's own particular state.
+	 * 
+	 * All Shapes calculate their area differently, so the behavior must use
+	 * the fields of the Concrete shape.
+	 * 
+	 * @return The area in floating point format
+	 */
+	Double area();
 }

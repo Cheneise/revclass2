@@ -5,26 +5,29 @@ import org.apache.log4j.Logger;
 import com.revature.definition.Color;
 import com.revature.definition.Shape;
 
-public class Circle extends Shape {
-	private static final Logger LOGGER = Logger.getLogger(Circle.class);
+/**
+ *	The synchronized version of a circle
+ *
+ */
+public class ConcurrentCircle extends Shape {
+	private static final Logger LOGGER = Logger.getLogger(ConcurrentCircle.class);
 	
 	private Double radius;
-	
 	/*
 	 * We don't have a default constructor anymore, so classes are forced to pass parameters.
 	 */
 	
-	public Circle(Color color, Double radius) {
+	public ConcurrentCircle(Color color, Double radius) {
 		super("CIRCLE", color);
 		LOGGER.trace("Args circle");
 		this.radius = radius;
 	}
 
-	public Double getRadius() {
+	public synchronized Double getRadius() {
 		return radius;
 	}
 
-	public void setRadius(Double radius) {
+	public synchronized void setRadius(Double radius) {
 		this.radius = radius;
 	}
 
@@ -44,7 +47,7 @@ public class Circle extends Shape {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Circle other = (Circle) obj;
+		ConcurrentCircle other = (ConcurrentCircle) obj;
 		if (radius == null) {
 			if (other.radius != null)
 				return false;
@@ -65,12 +68,12 @@ public class Circle extends Shape {
 	 * happen.
 	 */
 	@Override
-	public Double perimeter() {
+	public synchronized Double perimeter() {
 		return 2 * Math.PI * radius;
 	}
 
 	@Override
-	public Double area() {
+	public synchronized Double area() {
 		return Math.PI * Math.pow(radius, 2);
 	}
 

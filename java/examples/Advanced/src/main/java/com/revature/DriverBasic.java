@@ -8,113 +8,158 @@ import com.revature.model.Circle;
 import com.revature.model.Triangle;
 
 public class DriverBasic {
+
 	private static final Logger LOGGER = Logger.getLogger(DriverBasic.class);
 	
 	public static void main(String[] args) {
 		/**
-		 * Action!
+		 * ACTION!
 		 */
 		
-		//Lazy loading for the Class
+		/* 
+		 * It might be tricky to understand, but the classes are loaded if needed depending on the stack logic (lazy loading)
+		 * 
+		 * If we don't call that class it won't execute any of the static members.
+		 * 
+		 * To see the lazy loading effect, comment the line below.
+		 */
 		LOGGER.info(Color.BLACK);
 		
-		//We can't call constructor
-		Shape firstShape = new Circle(Color.BLACK, 4.0);
+		/*
+		 * -> We cannot create a color because constructor is private, static color instead
+		 * -> Note how Shapes constructor finishes before since we are doing the recursive super call
+		 */
+		Shape firstShape = new Circle(Color.BLACK, 3.0);
 		
+		/*
+		 * -> Note that even though the reference is a Shape, the object is **instanceof** circle
+		 */
 		if(firstShape instanceof Circle) {
-			LOGGER.info("The instantiated shape is a Circle");
+			LOGGER.info("The instantiated Shape IS A Circle");
 		}
 		
 		/*
-		 * -> We cant see describe on Shape because it's protected. We need to cast.
-		 * 
+		 * -> We cannot see the describe method because of it's protected and we are outside of the package.
+		 * -> However, the Circle class actually makes it public, so if we cast, we will see it.
+		 * -> Also remember, that no matter if we cast, the object IS STILL A circle, and no copies were created
 		 */
 		Circle circle = (Circle) firstShape;
 		if(circle == firstShape) {
-			LOGGER.info("The circle, will always be a Circle.");
+			LOGGER.info("The circle is still the same object created before");
 		}
 		circle.describe();
 		
 		/*
-		 * You can't see implementatation details of area (you don't mind).
+		 * -> If you control click on the area() or perimeter() methods, here is where you see abstraction in action!
+		 * -> You are not able to see the implementation details of the area method that the Circle has
+		 * (because you technically don't know that it is a circle)
+		 * -> However, virtual method invocation will call the Circle behavior!
 		 */
-		LOGGER.info("Area of the first circle: " + firstShape.area());
-		LOGGER.info("Perimeter of the first circle: " + firstShape.perimeter());
+		LOGGER.info("Area: " + firstShape.area());
+		LOGGER.info("Perimeter: " + firstShape.perimeter());
 		
 		/*
-		 * -> Circle is not immutable so we can change the parameter and
-		 * recalculate.
+		 * -> Circle is not immutable so we can change the radius on the same object, and re-execute
+		 * (we need to use the Circle reference since that setter doesn't exist in shape).
 		 */
-		circle.setRadius(9.0);
-		LOGGER.info("New Area of the first circle: " + firstShape.area());
-		LOGGER.info("New Perimeter of the first circle: " + firstShape.perimeter());
+		circle.setRadius(4.9);
+		LOGGER.info("New radius set");
+		LOGGER.info("New Area: " + firstShape.area());
+		LOGGER.info("New Perimeter: " + firstShape.perimeter());
 		
 		/*
-		 *  == vs equals() [override]
+		 * Let's create a second circle
+		 * 
+		 * -> This is comparing everything, the name, the color, the radius, all of it. Becase we overrid .equals()
+		 * -> However, the values of these two circles are not the same
 		 */
-		Shape secondShape = new Circle(Color.BLACK, 9.0);
-		if(firstShape != secondShape) {
-			LOGGER.info("Two different circles on the heap.");
-		}
+		Shape secondShape = new Circle(Color.RED, 9.0);
 		if(firstShape.equals(secondShape)) {
-			LOGGER.info("First and second circle have the same values.");
+			LOGGER.info("First and second shape are two different circles");
 		}
 		
 		/*
-		 * We are overriding toString
+		 * Let's create a third circle
+		 * 
+		 * -> We all agree that == will always be false, since firstShape and thirdShape are pointing to different objects in the Heap.
+		 * -> However, our equals method returns true because we overrid it!
+		 * -> Remember we changed the radius up there.
+		 */
+		Shape thirdShape = new Circle(Color.BLACK, 4.9);
+		if(firstShape != thirdShape) {
+			LOGGER.info("This way == will never be true");
+		}
+		if(firstShape.equals(thirdShape)) {
+			LOGGER.info("First and third shape have the same values!");
+		}
+		
+		/*
+		 * -> We can see the string version of our shape because we are overriding the toString() method in circle
+		 * -> Or we could just check the radius on the circle reference
 		 */
 		LOGGER.info(firstShape);
 		LOGGER.info(secondShape);
+		LOGGER.info(thirdShape);
+		
+		//Can't only see this one, I would need to cast the other two
+		LOGGER.info("Circle reference radius: " + circle.getRadius());
 		
 		/*
-		 * Circle is not final, we can extend
+		 * -> Quick nested class to show that we can extend the Circle class
 		 */
+		@SuppressWarnings("unused")
 		class CanExtend extends Circle {
 			public CanExtend(Color color, Double radius) {
 				super(color, radius);
 			}
 		}
 		
-		/**
-		 * Triangle
+		/*
+		 * Let's play with the Triangle now which has a few more things
 		 */
-		Shape thirdShape = new Triangle(Color.BLUE, 3, 4, 5);
+
+		Shape fourthShape = new Triangle(Color.BLUE, 3, 4, 5);
 		
 		/*
-		 * All pillars!
+		 * -> ALL PILLARS AGAIN!
 		 */
-		Triangle triangle = (Triangle) thirdShape; //Polymorphism (covariance)
+		Triangle triangle = (Triangle) fourthShape;
+		triangle.describe();
 		
-		triangle.describe(); //Encapsulation: was protected before and didn't work.
-		
-		//Abstraction
-		LOGGER.info("Area of the first triangle: " + thirdShape.area());
-		LOGGER.info("Perimeter of the first triangle: " + thirdShape.perimeter());
-		
-		// All of them in this case involve Inheritance.
+		LOGGER.info("Area: " + fourthShape.area());
+		LOGGER.info("Perimeter: " + fourthShape.perimeter());
 		
 		/*
 		 * The different parts
 		 */
 		
-		//Overloaded version
+		/*
+		 * -> Triangle doesn't override toString(), nor Shape.
+		 */
+		LOGGER.info(triangle);
+		
+		/*
+		 * Static method invocation! (Overloaded version that receives a triangle)
+		 */
 		if(Triangle.isRight(triangle)) {
-			LOGGER.info("The first triangle is a right one.");
-		} else {
-			LOGGER.info("The first triangle is not a right.");
+			LOGGER.info("The passed triangle is Right");
 		}
 		
-		//Triangle is final!
-//		class CantExtend extends Triangle {
+		/*
+		 * -> The triangle class is immutable, you can't change the sides nor extend the class
+		 * (Read the compiler!)
+		 */
+//		class CannotExtend extends Triangle {
 //			
 //		}
 		
 		/*
-		 * This will break at some point (not a right triangle).
+		 * This line will throw an exception at some point, because it's not a right triangle
+		 * and our constructor validates it.
 		 */
-		Shape fourthShape = new Triangle(Color.RED, 43636, 342, 2424);
+		Shape fifthShape = new Triangle(Color.BLUE, 4532, 24, 23424);
 		
-		LOGGER.info("Area: " + fourthShape.area());
-		LOGGER.info("Perimeter: " + fourthShape.perimeter());
+		LOGGER.info("Area: " + fifthShape.area());
+		LOGGER.info("Perimeter: " + fifthShape.perimeter());
 	}
 }
