@@ -2,28 +2,24 @@ package com.revature.definition;
 
 import org.apache.log4j.Logger;
 
-public abstract class Shape implements Calculable {
+public abstract class Shape implements Calculable, Comparable<Shape> {
 	private static final Logger LOGGER = Logger.getLogger(Shape.class);
 	
 	protected final String name;
 	protected final Color color;
 	
 	public Shape(String name, Color color) {
-		//super(); -----> Implicit!
 		LOGGER.trace("Args shape");
+		
 		this.name = name;
 		this.color = color;
 	}
 	
 	/**
-	 * Prints a brief explanation of the Shape
+	 * Prints a brief description of the shape
 	 */
 	protected abstract void describe();
 
-	/*
-	 * Fields of this class are immutable, no setters.
-	 */
-	
 	public String getName() {
 		return name;
 	}
@@ -31,7 +27,7 @@ public abstract class Shape implements Calculable {
 	public Color getColor() {
 		return color;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -61,5 +57,11 @@ public abstract class Shape implements Calculable {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public int compareTo(Shape shape) {
+		//Ascending: start with this
+		return this.name.compareTo(shape.name);
 	}
 }

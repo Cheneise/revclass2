@@ -6,51 +6,52 @@ import com.revature.definition.Color;
 import com.revature.definition.Shape;
 
 /**
- * This class only provides behavior for the Right Triangle. It is also immutable.
+ * This class can only handle Right Triangles.
+ *
  */
 public final class Triangle extends Shape {
-	private final static Logger LOGGER = Logger.getLogger(Triangle.class);
+	private static final Logger LOGGER = Logger.getLogger(Triangle.class);
 	
-	private final Integer oppositeLeg;
-	private final Integer adyacentLeg;
-	private final Integer hypotenuse;
+	//One leg
+	private final Integer a;
+	
+	//Second leg
+	private final Integer b;
+	
+	//Hypotenuse
+	private final Integer c;
 
-	public Triangle(Color color, Integer oppositeLeg, Integer adyacentLeg, Integer hypotenuse) {
+	public Triangle(Color color, Integer a, Integer b, Integer c) {
 		super("RIGHT TRIANGLE", color);
-		LOGGER.trace("Args Triangle");
 		
-		if(!isRight(oppositeLeg, adyacentLeg, hypotenuse)) {
-			//We need to throw an Exception if it's not a Right triangle
+		if(!isRight(a, b, c)) {
+			//I want to throw an exception here at some point.
 		}
 		
-		this.oppositeLeg = oppositeLeg;
-		this.adyacentLeg = adyacentLeg;
-		this.hypotenuse = hypotenuse;
+		this.a = a;
+		this.b = b;
+		this.c = c;
 	}
 
-	/*
-	 * Only the getters since our class is immutable
-	 */
-	
-	public Integer getOppositeLeg() {
-		return oppositeLeg;
+	public Integer getA() {
+		return a;
 	}
 
-	public Integer getAdyacentLeg() {
-		return adyacentLeg;
+	public Integer getB() {
+		return b;
 	}
 
-	public Integer getHypotenuse() {
-		return hypotenuse;
+	public Integer getC() {
+		return c;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((adyacentLeg == null) ? 0 : adyacentLeg.hashCode());
-		result = prime * result + ((hypotenuse == null) ? 0 : hypotenuse.hashCode());
-		result = prime * result + ((oppositeLeg == null) ? 0 : oppositeLeg.hashCode());
+		result = prime * result + ((a == null) ? 0 : a.hashCode());
+		result = prime * result + ((b == null) ? 0 : b.hashCode());
+		result = prime * result + ((c == null) ? 0 : c.hashCode());
 		return result;
 	}
 
@@ -63,55 +64,56 @@ public final class Triangle extends Shape {
 		if (getClass() != obj.getClass())
 			return false;
 		Triangle other = (Triangle) obj;
-		if (adyacentLeg == null) {
-			if (other.adyacentLeg != null)
+		if (a == null) {
+			if (other.a != null)
 				return false;
-		} else if (!adyacentLeg.equals(other.adyacentLeg))
+		} else if (!a.equals(other.a))
 			return false;
-		if (hypotenuse == null) {
-			if (other.hypotenuse != null)
+		if (b == null) {
+			if (other.b != null)
 				return false;
-		} else if (!hypotenuse.equals(other.hypotenuse))
+		} else if (!b.equals(other.b))
 			return false;
-		if (oppositeLeg == null) {
-			if (other.oppositeLeg != null)
+		if (c == null) {
+			if (other.c != null)
 				return false;
-		} else if (!oppositeLeg.equals(other.oppositeLeg))
+		} else if (!c.equals(other.c))
 			return false;
 		return true;
 	}
 
 	@Override
-	public Double perimeter() {
-		//Includes pythagorean theorem
-		return oppositeLeg + adyacentLeg + Math.sqrt(Math.pow(oppositeLeg, 2) + Math.pow(adyacentLeg, 2));
+	public String toString() {
+		return "Triangle [a=" + a + ", b=" + b + ", c=" + c + ", name=" + name + ", color=" + color + "]";
 	}
 
 	@Override
 	public Double area() {
-		return Double.sum(oppositeLeg, adyacentLeg) / 2.0;
+		return (a * b) / 2.0;
+	}
+
+	@Override
+	public Double perimeter() {
+		//Using pythagorean theorem
+		return a + b + Math.sqrt(Math.pow(a,2) + Math.pow(b, 2));
 	}
 
 	@Override
 	public void describe() {
-		LOGGER.info("A right triangle (American English) or right-angled triangle (British English) is a triangle in which one angle is a right angle (that is, a 90-degree angle)");
+		LOGGER.info("A right triangle is triangle with an angle of 90 degrees (pi/2 radians). The sides a, b, and c of such a triangle satisfy the Pythagorean theorem");
 	}
 	
 	/**
-	 * Validates if triangle is a right one, using the pythagorean theorem a^2 + b^2 = c^2.
-	 * 
-	 * It can be used without creating a triangle instance.
+	 * Checks if a triangle is a right one, receiving its sides. (By the Pythagorean theorem).
 	 */
-	public static boolean isRight(Integer oppositeLeg, Integer adyacentLeg, Integer hypotenuse) {
-		return Math.pow(oppositeLeg, 2) + Math.pow(adyacentLeg, 2) == Math.pow(hypotenuse, 2);
+	public static boolean isRight(Integer a, Integer b, Integer c) {
+		return Math.pow(a, 2) + Math.pow(b, 2) == Math.pow(c, 2);
 	}
 	
 	/**
-	 * Validates if triangle is a right one, using the pythagorean theorem a^2 + b^2 = c^2.
-	 * 
-	 * However, it receives a Triangle object instead of the sides.
+	 * Checks if a triangle is a right one, receiving a triangle object. (By the Pythagorean theorem).
 	 */
 	public static boolean isRight(Triangle triangle) {
-		return Math.pow(triangle.oppositeLeg, 2) + Math.pow(triangle.adyacentLeg, 2) == Math.pow(triangle.hypotenuse, 2);
+		return Math.pow(triangle.a, 2) + Math.pow(triangle.b, 2) == Math.pow(triangle.c, 2);
 	}
 }

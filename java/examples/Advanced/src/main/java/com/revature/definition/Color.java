@@ -2,41 +2,35 @@ package com.revature.definition;
 
 import org.apache.log4j.Logger;
 
-/**
- * This class only allows itself to create Colors. Classes from the outside
- * can only use the predefined colors this way.
- * 
- * It is also immutable.
- * 
- * This is another approach besides singleton, for a private constructor.
- */
 public final class Color {
 	private static final Logger LOGGER = Logger.getLogger(Color.class);
-	
+
+	/*
+	 * Classes can only use these static colors
+	 */
 	public static final Color BLACK;
 	public static final Color WHITE;
 	public static final Color RED;
 	public static final Color GREEN;
 	public static final Color BLUE;
 	
-	/**
-	 * This block could be calling the values from an external source, which makes it more maintainable
-	 * in a block than up there initializing in-line.
+	/*
+	 * This block could be getting the color data from an external resource
 	 */
 	static {
-		BLACK = new Color("BLACK", 0, 0, 0);
-		WHITE = new Color("WHITE", 255, 255, 255);
-		RED = new Color("RED", 255, 0, 0);
-		GREEN = new Color("GREEN", 0, 255, 0);
-		BLUE = new Color("BLUE", 0, 0, 255);
+		BLACK = new Color("BLACK", (short) 0, (short) 0, (short) 0);
+		WHITE = new Color("WHITE", (short) 255, (short) 255, (short) 255);
+		RED = new Color("RED", (short) 255, (short) 0, (short) 0);
+		GREEN = new Color("GREEN", (short) 0, (short) 255, (short) 0);
+		BLUE = new Color("BLUE", (short) 0, (short) 0, (short) 255);
 	}
 	
 	private final String name;
-	private final Integer red;
-	private final Integer green;
-	private final Integer blue;
+	private final Short red;
+	private final Short green;
+	private final Short blue;
 	
-	private Color(String name, Integer red, Integer green, Integer blue) {
+	private Color(String name, Short red, Short green, Short blue) {
 		LOGGER.trace("Parameters Color");
 		this.name = name;
 		this.red = red;
@@ -48,18 +42,22 @@ public final class Color {
 		return name;
 	}
 
-	public Integer getRed() {
+	public Short getRed() {
 		return red;
 	}
 
-	public Integer getGreen() {
+	public Short getGreen() {
 		return green;
 	}
 
-	public Integer getBlue() {
+	public Short getBlue() {
 		return blue;
 	}
 
+	/**
+	 * @Override annotation is optional. It ensures at compile time the that method
+	 * is properly overridden.
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
