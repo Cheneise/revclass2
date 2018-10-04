@@ -53,9 +53,19 @@ public class BandRegistrationTest {
 		assertTrue(bandService.registerBand(testBand));
 	}
 	
+	@Test
+	public void registrationSuccessProcedure() {
+		assertTrue(bandService.registerBandSecure(testBand));
+	}
+	
 	@Test(expected = BandRegistrationException.class)
 	public void registrationFailure() {
 		bandService.registerBand(testBandWrong);
+	}
+	
+	@Test(expected = BandRegistrationException.class)
+	public void registrationFailureSecure() {
+		bandService.registerBandSecure(testBandWrong);
 	}
 	
 	@After
