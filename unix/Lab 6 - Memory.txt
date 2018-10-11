@@ -1,0 +1,35 @@
+# free -> Display current memory usage, simple way
+
+# free -m -> In MB
+
+# free -h -> Human readable
+
+# watch -n 0.1 free -> Execute free every 0.1 seconds, you leverage watch to monitor anything
+
+# vmstat -> Displays not only memory information, but CPU, I/O and more (check your notes, remember some of what this info means)
+
+***CREATE A SWAP AREA***
+
+# sudo fallocate -l 1G /revature_swap -> Allocate 1GB to revature_swap file (this is just a file for now that is occupying space)
+
+# du -h /revature_swap -> Make sure is 1G (It's 1GiB which is 1.1GB)
+
+# sudo chmod 600 /revature_swap -> Make this file secure, it will complain when we turn it on if we don't
+
+# sudo mkswap /revature_swap -> Make this allocated a file a swap
+
+# free -h-> check your swap space (remember it, should be 8G depending on your setup)
+
+# sudo swapon /revature_swap -> Turn this swap area on
+
+# free -h -> you have one more gig now
+
+# sudo swapoff /revature_swap -> Turn off the swap area
+
+# free -h -> back to your main size
+
+-> Look at the content of this file
+-> It has the swap area we installed withn Red Hat
+-> To make the new on permanent, you would have to add (with vim and saving it): /revature_swap swap swap sw 0 0
+-> Without this added here, we have to swapon everytime we reboot.
+# cat /etc/fstab

@@ -1,0 +1,75 @@
+*****PARTITIONS*****
+
+# df -> Filesystem disk space usage, there is one better than this
+
+# lsblk -> double check the main disk, should be sda
+
+# ls /dev -> All of the devices are here with their id
+
+# sudo fdisk /dev/sda -> Open the application, it will prompt you to another shell
+
+> m -> for help
+
+> p -> print state of partition table
+
+> v -> print unallocated space, we need this space to create new partitions.
+
+> n -> create a new partition
+
+> p -> choose the primary partition type
+
+> ENTER twice times -> Leave defaults for partition number and starting block
+
+> +250M -> 250MiB partition ~ 262MB
+
+> p -> Take a look at the partition table now. We have sda3 now.
+
+> n -> create another partition
+
+> p -> Automatically selected partition 4 now
+
+> ENTER twice -> default for starting block and ending block, using rest of unallocated space -> 257MiB
+
+> p -> Check our final state
+
+> w -> Write the new partition table changes to the disk
+
+!WARNING!, we need to shutdown the machine in order to see the changes. Sometimes this works right away.
+
+# lsblk -> It's true, partitions are not here
+
+# shutdown -h now
+
+-> After reboot
+
+# lsblk -> Check your new state
+
+*****RAID 0*****
+
+# sudo mdadm -E /dev/sda[3-4] -> Check that there is no MD blocks on the paritions we will RAID
+
+# sudo mdadm -C /dev/md0 -l raid0 -n 2 /dev/sda[3-4] -> Array name, Level, Number of drives, Drives
+
+# lsblk -> Check your partitions now, we have md0 around
+
+# sudo mdadm --detail /dev/md0 -> Check RAID details
+
+-> We have our RAID 0 running now, these steps can be done without the RAID on the partitions we created, individually
+-> However, we will format our new ARRAY with an ext4 filesystem
+
+# sudo mkfs.ext4 /dev/md0 -> Format our new array with ext4
+
+# sudo mount /dev/md0 /media/raid -> Mount our new filesystem as a drive [sudo umount /media/raid removes the filesystem]
+
+# cd /media/raid -> You are now in the raid
+
+# sudo echo Welcome to the RAID >> raid.txt -> You just wrote a file into two drives.
+
+!!!Investigate: 
+- How to auto mount a volume on startup
+- How to create a Logical Volume group like that one that displays with lsblk **lvm**, this avoids mounting volumes.
+
+
+
+
+
